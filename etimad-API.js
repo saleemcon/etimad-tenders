@@ -8,7 +8,7 @@ import path from "path";
 // URLs
 const TENDER_URL = "https://tenders.etimad.sa/Tender/AllTendersForVisitor?PageSize=6&IsSearch=true&PublishDateId=5&TenderCategory=2&Sort=SubmitionDate&SortDirection=DESC";
 
-// Paths (relative)
+// Paths
 const jsonPath = path.join(process.cwd(), "tenders.json");
 const csvPath = path.join(process.cwd(), "tenders.csv");
 
@@ -31,10 +31,9 @@ app.listen(PORT, () => console.log(`📡 JSON server running on port ${PORT}`));
 async function main() {
   console.log("🚀 Etimad Tender Collector Started");
 
-  // Launch headless browser
   const browser = await puppeteer.launch({
-    headless: true, // Must be headless in cloud
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
   });
 
   const page = await browser.newPage();
@@ -47,8 +46,7 @@ async function main() {
   console.log("📄 Extracting tenders...");
 
   const tenders = await page.evaluate(() => {
-    const cards = Array.from(document.querySelectorAll(".tender-card"));
-    return cards.map((card) => {
+    return Array.from(document.querySelectorAll(".tender-card")).map((card) => {
       const ref = card.querySelector(".cont-bar")?.getAttribute("data-bar") || "";
       const title = card.querySelector("h3 a")?.innerText.trim() || "";
       const agencyText = card.querySelector("p.pb-2")?.innerText.trim() || "";
@@ -60,27 +58,15 @@ async function main() {
       const price = card.querySelector(".saudi-riyal-symbol")?.innerText.trim() || "مجانا";
       const url = card.querySelector("h3 a")?.href || "";
 
-      return {
-        referenceNumber: ref,
-        title,
-        agency,
-        activity,
-        tenderType,
-        publishDate,
-        remainingDays: remaining,
-        price,
-        url,
-      };
+      return { referenceNumber: ref, title, agency, activity, tenderType, publishDate, remainingDays: remaining, price, url };
     });
   });
 
   console.log("📊 Total tenders collected:", tenders.length);
 
-  // Save JSON
   await fs.writeJSON(jsonPath, tenders, { spaces: 2 });
   console.log(`💾 Saved JSON to ${jsonPath}`);
 
-  // Save CSV
   if (tenders.length > 0) {
     try {
       const parser = new Parser();
@@ -96,5 +82,4 @@ async function main() {
   console.log("✅ Done - Server still running to serve JSON");
 }
 
-// Run
 main().catch((err) => console.error("❌ Error:", err));
