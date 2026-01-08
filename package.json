@@ -21,4 +21,7 @@
   "keywords": ["tenders", "puppeteer", "express", "json-api"],
   "author": "",
   "license": "ISC"
+},
+"scripts": {
+  "postinstall": "puppeteer install"
 }
