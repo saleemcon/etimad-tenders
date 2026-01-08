@@ -2,9 +2,9 @@
   "name": "etimad-tenders",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "etimad-API.js",
   "scripts": {
-    "start": "node etimad.js",
+    "start": "node etimad-API.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -17,8 +17,8 @@
     "puppeteer": "^24.34.0",
     "tough-cookie": "^6.0.0"
   },
-  "description": "",
-  "keywords": [],
+  "description": "Etimad Tender Collector API",
+  "keywords": ["tenders", "puppeteer", "express", "json-api"],
   "author": "",
   "license": "ISC"
 }
