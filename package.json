@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "main": "etimad-API.js",
+  "description": "Etimad Tender Collector API",
+  "keywords": ["tenders", "puppeteer", "express", "json-api"],
+  "author": "",
+  "license": "ISC",
   "scripts": {
     "start": "node etimad-API.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "puppeteer install"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,12 +21,5 @@
     "node-fetch": "^2.7.0",
     "puppeteer": "^24.34.0",
     "tough-cookie": "^6.0.0"
-  },
-  "description": "Etimad Tender Collector API",
-  "keywords": ["tenders", "puppeteer", "express", "json-api"],
-  "author": "",
-  "license": "ISC"
-},
-"scripts": {
-  "postinstall": "puppeteer install"
+  }
 }
